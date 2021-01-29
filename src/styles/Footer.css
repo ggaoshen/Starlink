@@ -1,0 +1,11 @@
+
+
+.footer {
+    position: absolute; /*挨着header*/
+    bottom: 0; /*贴底*/
+    left: 0; /*居中*/
+    right: 0; /*居中*/
+    margin: auto;
+    width: 100%;
+    text-align: center;
+}

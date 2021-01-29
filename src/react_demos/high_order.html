@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+
+<body>
+<h1>HOC</h1>
+<div id="root"></div>
+
+<script>
+    // fn -> params
+    // fn -> return
+
+    function fn(cb) {
+        console.log(1);
+        cb(2);
+    }
+
+    fn(function (data) {
+        console.log(data);
+    })
+
+    function fn1() {
+        console.log('a');
+
+        // var test = function(a, b) {
+        //     console.log(a + b);
+        // };
+        // return test;
+
+        return function(a, b) {
+            console.log(a + b);
+        };
+    }
+
+    var res = fn1();
+    console.log(res); // ?
+    res(1, 2); // ?
+
+    // hof - higher order function
+    //  - fn
+    //  - params -> fn
+    //  - return -> fn
+
+    // hoc - higher order component
+    //  - param -> component
+    //  - return a new component
+</script>
+
+<script type="text/babel">
+    function withSize(Component) {
+        return class Wrapper extends React.Component {
+            state = {
+                width: document.documentElement.clientWidth,
+                height: document.documentElement.clientHeight
+            }
+
+            componentDidMount() {
+                window.addEventListener('resize', this.reSize)
+            }
+
+            reSize = () => {
+                this.setState({
+                    width: document.documentElement.clientWidth,
+                    height: document.documentElement.clientHeight
+                })
+            }
+
+            sayHello = () => {
+                console.log('hahaha')
+            }
+
+            render() {
+                return (
+                    <Component
+                        {...this.state}
+                        sayHello={this.sayHello}/>
+                )
+            }
+        }
+    }
+
+    class Child extends React.Component {
+        // state = {
+        //     width: document.documentElement.clientWidth,
+        //     height: document.documentElement.clientHeight
+        // }
+
+        render() {
+            // const { width, height } = this.state;
+            const { width, height } = this.props;
+            return (
+                <div>
+                    <h2>I am a child component</h2>
+                    <p>width: { width }</p>
+                    <p>height: { height }</p>
+                    <button onClick={
+                        () => {
+                            this.props.sayHello()
+                        }
+                    }>click me</button>
+                </div>
+            )
+        }
+
+        // componentDidMount() {
+        //     window.addEventListener('resize', this.reSize)
+        // }
+        //
+        // reSize = () => {
+        //     this.setState({
+        //         width: document.documentElement.clientWidth,
+        //         height: document.documentElement.clientHeight
+        //     })
+        // }
+    }
+
+    const WrapperChild = withSize(Child);
+
+    // class Child2 extends React.Component {
+    //     state = {
+    //         width: document.documentElement.clientWidth,
+    //         height: document.documentElement.clientHeight
+    //     }
+    //
+    //     render() {
+    //         const { width, height } = this.state;
+    //         return (
+    //             <div>
+    //                 <h2>I am a child2 component</h2>
+    //                 <p>width: { width }</p>
+    //                 <p>height: { height }</p>
+    //             </div>
+    //         )
+    //     }
+    //
+    //     componentDidMount() {
+    //         window.addEventListener('resize', this.reSize)
+    //     }
+    //
+    //     reSize = () => {
+    //         this.setState({
+    //             width: document.documentElement.clientWidth,
+    //             height: document.documentElement.clientHeight
+    //         })
+    //     }
+    // }
+
+    class App extends React.Component {
+        render() {
+            return (
+                <div>
+                    <h1>I am a parent</h1>
+                    <hr/>
+                    <WrapperChild />
+                    {
+                        // <Child />
+                        // <hr/>
+                        // <Child2 />
+                    }
+
+                </div>
+            )
+        }
+    }
+
+    ReactDOM.render(
+        <App />,
+        document.getElementById("root")
+    )
+</script>
+</body>
+</html>
+

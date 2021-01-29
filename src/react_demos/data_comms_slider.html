@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.21.1/babel.min.js"></script>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+    class App extends React.Component {
+        state = {
+            r: 100,
+            g: 110,
+            b: 100
+        }
+
+        render() {
+            const { r, g, b } = this.state;
+            return (
+                <div>
+                    <div style={
+                        {
+                            "width": "200px",
+                            "height": "200px",
+                            "backgroundColor": `rgb(${r}, ${g}, ${b})`
+                        }
+                    }></div>
+                    <p>
+                        red:
+                        <input
+                            type="range"
+                            min="0"
+                            max="255"
+                            value={r}
+                            onChange={
+                                event => {
+                                    console.log(event.target.value);
+                                    this.setState({
+                                        r: event.target.value
+                                    })
+                                }
+                            } />
+                        { r }
+                    </p>
+
+                    <p>
+                        green:
+                        <input
+                            type="range"
+                            min="0"
+                            max="255"
+                            value={g}
+                            onChange={
+                                (e) => {
+                                    this.setState({g:e.target.value})
+                                }
+                            }
+                        />
+                        { g }
+                    </p>
+
+                    <p>
+                        blue:
+                        <input
+                            type="range"
+                            min="0"
+                            max="255"
+                            value={b}
+                            onChange={
+                                (e) => {
+                                    this.setState({b:e.target.value})
+                                }
+                            }
+                        />
+                        { b }
+                    </p>
+
+                </div>
+            )
+        }
+    }
+
+    ReactDOM.render(
+        <App />,
+        document.getElementById("root")
+    )
+</script>
+
+</body>
+</html>

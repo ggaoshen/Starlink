@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.21.1/babel.min.js"></script>
+</head>
+<body>
+
+<h1>Call Back</h1>
+
+<div id="root"></div>
+
+<script type="text/javascript">
+    // cb
+    // 1. what is cb
+    // - a function
+    // - as parameter
+
+    function test() {
+        console.log('test')
+    }
+
+    var test1 = function() {
+        console.log('test1')
+    }
+
+    test();
+    test1();
+
+    // 2. how to use cb??
+    function fn(cb) {
+        console.log('fn')
+        cb('fn')
+        console.log('2')
+    }
+
+    function test(str) {
+        console.log('test', str)
+    }
+
+    fn(test)
+    // print:
+    // fn
+    // test fn
+    // 2
+
+    // 3. why use cb?
+    // a, b, type
+    function cal(a, b, type) {
+        if(type === "+") {
+            return a+b;
+        } else if (type === '-') {
+            return a - b;
+        } else {
+            return "IDK"
+        }
+    }
+
+    var res = cal(1, 5, "*")
+    // 这么写有什么坏处？
+    // 可扩展性不好，如果添加*，/必须在cal function中添加，必须touch源代码
+    // 可以用cb解决
+
+    function cal2 (a, b, cb) {
+        return cb(a, b);
+    }
+
+    var add = function(a, b) {return a+b};
+    var minus = function(a, b) {return a-b};
+
+    var res = cal2(1, 5, add)
+
+
+    // 4. javascript是单线程的
+    // 可以通过callback实现异步操作
+
+    // cb can be -sync'ed and -async'ed
+    // console.log(1);
+    // var a = "hello";
+    // console.log(a);
+
+    // console.log(2);
+    // setTimeout(function() {
+    //     console.log(3)
+    // }, 1000) // 等待一秒钟再执行内部函数
+    // console.log(4);
+    // // print 243
+    // // timeout里的call back是个异步回调函数
+
+    console.log('start')
+    var arr = [1, 2, 3];
+    arr.forEach( (item) => {
+        console.log(item * 2)
+    }) // forEach只能遍历array
+    console.log('end')
+    // print
+    // start, 2, 4, 6, end
+    // 所以这是个同步的回调函数
+
+
+</script>
+
+</body>
+</html>

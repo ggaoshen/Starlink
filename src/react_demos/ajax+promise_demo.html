@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.21.1/babel.min.js"></script>
+</head>
+<body>
+
+<h1>Ajax + Promise</h1>
+
+<div id="root"></div>
+
+<script type="text/javascript">
+    // ajax
+    // - what is ajax
+    // - how to use
+    // 4 steps
+
+    // step 1：create ajax
+    var xhr = new XMLHttpRequest();
+
+    // step 2: config
+    // url, method, data(POST)
+    xhr.open('GET', 'https://petstore.swagger.io/v2/swagger.json', true);
+
+    // step 3: send
+    xhr.send();
+    console.log(xhr);
+
+    // 如果需要发送数据
+    // xhr.setRequestHeader("content-type", "application/json")
+    // xhr.send(data)
+
+    // step 4: listen req + res
+    xhr.onload = function() {
+        // 这里xhr是返回的response
+        if (xhr.status === 200) {
+            var obj = JSON.parse(xhr.responseText)
+            console.log(obj)
+        }
+        console.log(xhr);
+    }
+
+    xhr.onerror = function() {
+        console.log('err')
+    }
+
+
+
+// AJAX
+    // params: method, url, data, sc, ec
+    function ajax(opt) {
+        var opt = opt || {},
+            method = opt.method || 'GET',
+            url = opt.url,
+            data = opt.data || null,
+            success = opt.success || function() {},
+            error = opt.error || function() {},
+            //step1:
+            xhr = new XMLHttpRequest();
+
+        // step2:
+        xhr.open(method, url, true);
+
+        // step3:
+        if(!data){
+            xhr.send();
+        }
+
+        // step4:
+        xhr.onload = function() {
+            if(xhr.status === 200) {
+                success(JSON.parse(xhr.responseText))
+            } else {
+                error();
+            }
+        }
+
+        xhr.onerror = function () {
+            error();
+        }
+    }
+
+    // ajax( {
+    //     method: 'GET',
+    //     url: 'https://petstore.swagger.io/v2/swagger.json',
+    //     success: function( response ) {
+    //         console.log('1')
+    //         console.log(response)
+    //         // req2
+    //         ajax({
+    //             method: 'GET',
+    //             url: 'https://petstore.swagger.io/v2/swagger.json',
+    //             success: function (response2) {
+    //                 console.log('2')
+    //                 console.log(response2)
+    //             }
+    //         })
+    //     },
+    //     error: function() {
+    //         console.log('error')
+    //     }
+    // } )
+
+
+</script>
+
+<script type="text/javascript">
+    // cb
+    //  - sync
+    //  - async
+
+    // - sync
+    // console.log(1);
+    // var a = "hello";
+    // console.log(a);
+
+    // - async
+    // console.log(2);
+    // setTimeout(function() {
+    //     console.log(3);
+    // }, 0)
+    // console.log(4);
+
+    // console.log('start')
+    // var arr = [1, 2, 3];
+    // arr.forEach( function(item) {
+    //     console.log(item * 2)
+    // });
+    // console.log('end')
+
+    // cb problem - callback hell 回调地狱，相当于层层if，不好读
+    // ajax( { // 第一个ajax
+    //     method: 'GET',
+    //     url: 'https://petstore.swagger.io/v2/swagger.json',
+    //     success: function( response ) {
+    //         console.log('1')
+    //         console.log(response)
+    //         // req2
+    //         ajax({ // 第二个ajax
+    //             method: 'GET',
+    //             url: 'https://petstore.swagger.io/v2/swagger.json',
+    //             success: function (response2) {
+    //                 console.log('2')
+    //                 console.log(response2)
+    //             }
+    //         })
+    //     },
+    //     error: function() {
+    //         console.log('error')
+    //     }
+    // } )
+
+    // 处理回调地狱： solution c.h -> promise
+    console.log(1)
+    var promise = new Promise(function(res, rej) { // resolve和reject是Promise给的
+        console.log(2)
+        setTimeout( function() {
+            let num = Math.random() * 100;
+            // let num = 20
+            // console.log(num);
+            if( num > 60 ) {
+                res(num)
+            } else {
+                rej(num)
+            }
+        }, 1000)
+    });
+
+    console.log(900)
+
+    // Promise赋值方法一
+    // 给promise在then里传resolve function，在err里传reject function
+    // promise.then(
+    //     function(res) {
+    //         console.log('success -> ', res);
+    //     },
+    //     function(err) {
+    //         console.log('err -> ', err);
+    // })
+
+    // P    romise赋值方法二
+    promise
+        .then( res => console.log(res)) // err传入139行给resolve
+        .catch( err => console.log(err)) // err传入139行给reject
+
+    // 3 status: pending resolved reject
+
+//
+
+</script>
+
+
+
+
+<script type="text/javascript">
+    function ajax(opt) {
+        var opt = opt || {},
+            method = opt.method || 'GET',
+            url = opt.url,
+            data = opt.data || null,
+            success = opt.success || function() {},
+            error = opt.error || function() {},
+            //step1:
+            xhr = new XMLHttpRequest();
+
+        // step2:
+        xhr.open(method, url, true);
+
+        // step3:
+        if(!data){
+            xhr.send();
+        }
+
+        // step4:
+        xhr.onload = function() {
+            if(xhr.status === 200) {
+                success(JSON.parse(xhr.responseText))
+            } else {
+                error();
+            }
+        }
+
+        xhr.onerror = function () {
+            error();
+        }
+    }
+
+    // ajax( {
+    //     method: 'GET',
+    //     url: 'https://petstore.swagger.io/v2/swagger.json',
+    //     success: function( response ) {
+    //         console.log('1')
+    //         console.log(response)
+    //         // req2
+    //         ajax({
+    //             method: 'GET',
+    //             url: 'https://petstore.swagger.io/v2/swagger.json',
+    //             success: function (response2) {
+    //                 console.log('2')
+    //                 console.log(response2)
+    //
+    //                 // re3
+    //             }
+    //         })
+    //     },
+    //     error: function() {
+    //         console.log('error')
+    //     }
+    // } )
+
+    // promise
+    function promisifyAjax(opt) {
+        var setting = opt || {};
+
+        // create promise obj
+        var promiseObj = new Promise(function(resolve, reject) {
+            var opt = setting || {},
+                method = opt.method || 'GET',
+                url = opt.url,
+                data = opt.data || null,
+                //step1:
+                xhr = new XMLHttpRequest();
+
+            // step2:
+            xhr.open(method, url, true);
+
+            // step3:
+            if(!data){
+                xhr.send();
+            }
+
+            // step4:
+            xhr.onload = function() {
+                if(xhr.status === 200) {
+                    // success(JSON.parse(xhr.responseText))
+                    resolve(JSON.parse(xhr.responseText));
+                } else {
+                    // error();
+                    reject("server error");
+                }
+            }
+
+            xhr.onerror = function () {
+                // error();
+                reject("error");
+            }
+        });
+
+        return promiseObj;
+    }
+
+    // req1
+    promisifyAjax({
+        method: 'GET',
+        url: 'https://petstore.swagger.io/v2/swagger.json'
+    }).then( function(res) {
+        console.log('11 -> ', res);
+
+        // req2
+        return promisifyAjax({
+            method: 'GET',
+            url: 'https://petstore.swagger.io/v2/swagger.json'
+        })
+    }).then( function( res ) {
+        console.log('111 -> ', res);
+    }).catch( function(err) {
+        console.log('12 -> ', err);
+    })
+</script>
+
+
+</body>
+</html>

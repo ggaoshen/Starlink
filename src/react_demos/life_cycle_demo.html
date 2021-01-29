@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.21.1/babel.min.js"></script>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+    // 1. what is a component’s life cycle?
+    // - life cycle： creation（mounting）, updating, unmount
+    // - life cycle function 不同life cyle 有不同的function来管理
+    // 2. how  to use life cycle functions
+
+    class Child extends React.Component {
+        constructor(props) {
+            super();
+            this.state = {
+                data: 10
+            }
+            console.log('1.constructor', props);
+        }
+
+        // required
+        render() {
+            console.log('2.render')
+            // 不能在render层用this.setState({})， 因为这里调用会trigger re-render，就死循环了
+            return (
+                <div>
+                    <h2>this is Child</h2>
+                    <h5>num from Parent: { this.props.num }</h5>
+                    <h5>my data: { this.state.data }</h5>
+                    <button onClick={
+                        () => {
+                            this.setState( pre => ({data: pre.data+10}))
+                        }
+                    }>add 10</button>
+                </div>
+            )
+        }
+
+        // didUpdate可以用setState，但是需要加停止条件，不然也会死循环。有条件就相当于while loop
+        componentDidUpdate(preProps, preState) { // 常用参数：可拿到preProps, preState
+            console.log('componentDidUpdate')
+            if (this.props.num === 2 * preProps.num) { // 当+10之后为之前2倍，print haha
+                console.log('haha')
+            }
+            console.log('preProps -> ', preProps)
+            console.log('preState -> ', preState)
+        }
+
+        componentDidMount() {
+            // creation：constructor->render->didMount.
+            // didMount是可以在初次render后拿到已render的数据用的
+            console.log('3. didMount')
+            // var h3 = document.getElementsByTagName('h3')[0];
+            // console.log(h3)
+            // h3.innerHTML = "haha"
+
+            // fetch data
+        }
+
+        componentWillUnmount() { // 由child component是否显示在html页面上来决定的，比如hide child的时候
+            console.log('componentWillUnmount')
+        }
+    }
+
+    class Parent extends React.Component {
+        constructor() {
+            super();
+            this.state = {
+                isShow: false,
+                num: 100
+            }
+        }
+        render() {
+            return (
+                <div>
+                    <h2>this is Parent</h2>
+
+                    <button onClick={
+                        () => {
+                            this.setState({
+                                isShow: !this.state.isShow
+                            })
+                        }
+                    }>show / hide child</button>
+                    { // 插值
+                        this.state.isShow
+                            ?
+                            <div>
+                                <button onClick={
+                                    () => {
+                                        this.setState( pre => ({num: pre.num+10}))
+                                    }
+                                }>add 10</button>
+                                <Child num={this.state.num}/> // 给child props
+                            </div>
+                            : null
+                    }
+                </div>
+            )
+        }
+    }
+
+    ReactDOM.render(
+        <Parent />, // 这个得render对,render App/是不对的
+        document.getElementById('root')
+    );
+</script>
+</body>
+</html>

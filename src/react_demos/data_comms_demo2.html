@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.21.1/babel.min.js"></script>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+    // data communication
+    // parent -> child： props默认是父向子传参的
+    // -p, <Child key={value} />
+    // -c, props.key
+
+    // child -> parent: 通过cb。就是父组件把可以修改值的方法交给了子组件
+    // -p, define cb fn
+    // -p, <Child key={cb fn}>
+    // -c, props.key->fn
+
+
+    class Child extends React.Components {
+        render() {
+            const { count } = this.props;
+
+            return (
+                <div>
+                    <h2>This is Child</h2>
+                    <h3>data from Parent: {count}</h3>
+
+                    <b2 />
+                    <button onClick={// 通过子组件的button来改父组件的value（用onChangeNum cb）
+                        () => {
+                            const { count } = this.props; // 通过名字解构的，count1也可以
+                            console.log(1);
+                            // console.log(this.props.onChangeNum)
+                            this.props.onChangeNum(count + 20)
+                        }
+                    }>change parent data</button>
+                </div>
+            )
+        }
+    }
+
+    class Parent extends React.Component {
+        state = {
+            num: 10
+        }
+        render() {
+            const { num } = this.state;
+            return (
+                <div>
+                    <h2>This is Parent</h2>
+                    <h3>my own data is: { num }</h3>
+
+                    <hr />
+
+                    <Child count={num} // 父传子：这个count可以在Child通过props接收
+                           onChangeNum={this.changeNum} // onChangeNum指向cb function
+                    />
+                </div>
+            )
+        }
+
+        changeNum = (data) => {
+            console.log('change data...', data)
+            this.setState({ num: data })
+        }
+    }
+
+        ReactDOM.render(
+        <App/>,
+        document.getElementById('root')
+        );
+</script>
+</body>
+</html>
+
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>Title</title>-->
+<!--    <script src="https://unpkg.com/react@17/umd/react.development.js"></script>-->
+<!--    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>-->
+<!--    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>-->
+<!--</head>-->
+<!--<body>-->
+<!--<div id="root"></div>-->
+
+<!--<script type="text/babel">-->
+<!--    // data communication-->
+<!--    //  p -> c：-->
+<!--    //      - p, <C key={value} />-->
+<!--    //      - c, props.key-->
+
+<!--    // c -> p : cb-->
+<!--    //      - p, define fn-->
+<!--    //      - p, <C key={fn} />-->
+<!--    //      - c, props.key->fn-->
+
+<!--    class Child extends React.Component {-->
+<!--        render() {-->
+<!--            const { count } = this.props;-->
+<!--            return (-->
+<!--                <div>-->
+<!--                    <h2>This is Child</h2>-->
+<!--                    <h3>data from Parent: {count}</h3>-->
+
+<!--                    <br />-->
+<!--                    <button onClick={ -->
+<!--                        () => {-->
+<!--                            const { count } = this.props; -->
+<!--                            console.log(1);-->
+<!--                            // console.log(this.props.onChangeNum)-->
+<!--                            this.props.onChangeNum(count + 20)-->
+<!--                        }-->
+<!--                    }>change parent data</button>-->
+<!--                </div>-->
+<!--            )-->
+<!--        }-->
+
+<!--    }-->
+
+<!--    class Parent extends React.Component {-->
+<!--        state = {-->
+<!--            num: 10-->
+<!--        }-->
+<!--        render() {-->
+<!--            const { num } = this.state;-->
+<!--            return (-->
+<!--                <div>-->
+<!--                    <h2>This is Parent</h2>-->
+<!--                    <h3>my own data is: { num }</h3>-->
+
+<!--                    <hr />-->
+
+<!--                    <Child count={num} -->
+<!--                           // count1={1}-->
+<!--                           onChangeNum={this.changeNum} -->
+<!--                    />-->
+<!--                </div>-->
+<!--            )-->
+<!--        }-->
+
+<!--        changeNum = (data) => {-->
+<!--            console.log('change data...', data)-->
+<!--            this.setState({ num: data })-->
+<!--        }-->
+<!--    }-->
+
+<!--    ReactDOM.render(-->
+<!--        <Parent />,-->
+<!--        document.getElementById("root")-->
+<!--    )-->
+<!--</script>-->
+
+<!--</body>-->
+<!--</html>-->
+

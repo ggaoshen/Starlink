@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.21.1/babel.min.js"></script>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+    class App extends React.Component {
+        constructor() {
+            super();
+            this.myRef = React.createRef();
+            // 第2种方法：this.myRef是一个object，默认current key
+        }
+
+        render() {
+            return (
+                <div>
+                    <p> <!--第一种方法： ref=”myinput”-->
+                        <input type="text" ref="myinput"/>
+                    </p>
+                    <p>
+                        <button onClick={
+                            () => {
+                                console.log(this.refs.myinput);
+                                console.log(this.refs.myinput.value);
+                            }
+                        }>click me</button>
+                    </p>
+
+                    <p ref={this.myRef} onClick={
+                        // 第2种方法：this.myRef是一个object，默认current key
+                        () => {
+                        console.log(this.myRef)
+                        console.log(this.myRef.current.value)
+                    }
+                    }>this is ref</p>
+
+                    <h2 ref={h2 => console.log('h2 -> ', h2)}>this is h2</h2>
+
+                    <p ref = { // 第三种方法：回调函数
+                        pInstance => {
+                        console.log(pInstance)
+                        this.pRef = pInstance; // 这里赋值给一个组件的全局变量，便于后面调用
+                        }
+                    }> this is a paragraph </p>
+                </div>
+            )
+        }
+        }
+
+        // methods:
+        //  - string ref - <= react 15
+        //  - react.createRef >= 16
+        //  - cb
+        //
+        // class App extends React.Component{
+        //     constructor() {
+        //         super();
+        //         this.myHaha = React.createRef();
+        //         this.myHaha1 = React.createRef();
+        //         console.log(this.myHaha)
+        //     }
+        //
+        //     render() {
+        //         return (
+        //             <div ref="haha">
+        //                 <input type="text" ref="myInput" />
+        //                 <button onClick={
+        //                     () => {
+        //                         console.log(1)
+        //                         console.log(this.refs.myInput.value)
+        //                     }
+        //                 }>click me</button>
+        //
+        //                 <hr />
+        //
+        //                 <input type="text" ref={this.myHaha}/>
+        //                 <p ref={this.myHaha1}>haha</p>
+        //                 <button onClick={
+        //                     () => {
+        //                         console.log(this.myHaha.current.value)
+        //
+        //                         console.log(this.pRef.innerHTML);
+        //                     }
+        //                 }>click me 2</button>
+        //
+        //                 <p ref={
+        //                     pInstance => {
+        //                         console.log(pInstance)
+        //                         this.pRef = pInstance;
+        //                     }
+        //                 }>this is a paragraph</p>
+        //
+        //             </div>
+        //         )
+        //     }
+        // }
+
+        ReactDOM.render(
+        <App/>,
+        document.getElementById('root')
+        );
+</script>
+</body>
+</html>
