@@ -8,7 +8,7 @@ class Header extends Component {
                     <img src={spacex_logo} className="App-logo"
                          alt="logo" />
                     <p className="title">
-                        Starlink Tracker...
+                        Starlink Tracker
                     </p>
                 </header>
         );
