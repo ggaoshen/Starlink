@@ -1,0 +1,40 @@
+/* overlap the 2 canvases in Worldmap, use absolute position for overlapping */
+.map-box {
+    position: relative;
+    height: inherit;
+    width: inherit;
+}
+
+.map, .track, .spinner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+}
+
+.map {
+    z-index: 0;
+}
+
+/* larger z-index will appear on top */
+.track {
+    z-index: 100;
+}
+
+.spinner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 600px;
+    width: 960px;
+}
+
+.hint {
+    color: red;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    width: 100%;
+}

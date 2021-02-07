@@ -9,21 +9,26 @@ class Main extends Component {
     state = {
         setting: null,
         satInfo: null,
+        satList: null,
         isLoadingList: false,
     }
     render() {
-        const { satInfo, isLoadingList } = this.state;
+        const { satInfo, satList, setting, isLoadingList } = this.state;
         return (
             <div className="main">
                 <div className="left-side">
-                    <SatSetting onShow={this.fetchSatellite}/>
+                    <SatSetting onShow={this.showNearbySatellite}/>
                     <SatelliteList
                         isLoad={isLoadingList}
+                        onShowMap={this.showMap}
                         satInfo={satInfo}
                     />
                 </div>
                 <div className="right-side">
-                    <WorldMap />
+                    <WorldMap
+                        satData={satList}
+                        observerData={setting}
+                    />
                 </div>
             </div>
         );
@@ -33,7 +38,7 @@ class Main extends Component {
     // Step 1：define cb function
     fetchSatellite = setting => {
         console.log(setting);
-        // fetch datat from the server
+        // fetch data from the server
 
         // step 1: get setting
         const { latitude, longitude, elevation, altitude} = setting;
@@ -60,9 +65,23 @@ class Main extends Component {
         })
     }
 
-    showMap = () => {
-        console.log('show on the map');
+    showMap = selectedSatList => { // pass param from satList (child) -> main (parent)
+        // console.log('show on the map');
+        this.setState(
+            {satList: selectedSatList}
+            // or use callback
+            // preState => ({...preState, satList: [...selectedSatList]})
+        )
     }
+
+    showNearbySatellite = (setting) => {
+        this.setState({
+            isLoadingList: true,
+            setting: setting
+        })
+        this.fetchSatellite(setting);
+    }
+
 
 }
 
